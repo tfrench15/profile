@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// GetProperties queries the Profile API for the given ID's
-// properties.
+// GetProperties queries the Profile API for the given ID's properties.
 func (c *Client) GetProperties(id, value string) error {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/properties"
 

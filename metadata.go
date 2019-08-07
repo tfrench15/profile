@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// GetMetadata queries the Profile API for the given ID's
-// metadata.
+// GetMetadata queries the Profile API for the given ID's metadata.
 func (c *Client) GetMetadata(id, value string) error {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/metadata"
 

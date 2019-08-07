@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// GetEvents queries the Profile API for the given ID's
-// events.
+// GetEvents queries the Profile API for the given ID's events.
 func (c *Client) GetEvents(id, value string) error {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/events"
 

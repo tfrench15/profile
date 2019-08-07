@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-// GetExternalIDs queries the Profile API for the given ID's
-// externalID's.
+// GetExternalIDs queries the Profile API for the given ID's externalID's.
 func (c *Client) GetExternalIDs(id, value string) error {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/external_ids"
 
