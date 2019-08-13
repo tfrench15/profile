@@ -17,14 +17,3 @@ type Metadata struct {
 	LastMessageID  string `json:"last_message_id"`
 	LastSourceID   string `json:"last_source_id"`
 }
-
-// ExternalID represents an external ID in the Personas Identity Graph.
-type ExternalID struct {
-	SourceID       string `json:"source_id"`
-	Collection     string `json:"collection"`
-	ID             string `json:"id"`
-	Type           string `json:"type"`
-	CreatedAt      string `json:"created_at"`
-	Encoding       string `json:"encoding"`
-	FirstMessageID string `json:"first_message_id"`
-}
