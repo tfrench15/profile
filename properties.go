@@ -1,8 +1,8 @@
 package profile
 
 import (
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -12,28 +12,45 @@ type Property struct {
 	Value string `json:"value"`
 }
 
+// Properties contains a slice of Property.
+type Properties struct {
+	Data   []*Property `json:"data"`
+	Cursor *Cursor     `json:"cursor"`
+}
+
 // GetProperties queries the Profile API for the given ID's properties.
-func (c *Client) GetProperties(id, value string) error {
+func (c *Client) GetProperties(id, value string) (*Properties, error) {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/properties"
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	req.SetBasicAuth(c.secret, "")
 
 	res, err := c.client.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer res.Body.Close()
 
-	b, err := ioutil.ReadAll(res.Body)
+	properties := newProperties()
+	dec := json.NewDecoder(res.Body)
+
+	err = dec.Decode(properties)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Println(string(b))
-	return nil
+	fmt.Println(properties)
+	return properties, nil
+}
+
+func newProperties() *Properties {
+	c := &Cursor{}
+	return &Properties{
+		Data:   []*Property{},
+		Cursor: c,
+	}
 }
