@@ -16,9 +16,7 @@ type Client struct {
 }
 
 // New returns a new Client.
-func New(namespaceID string) *Client {
-	secret := "TODO"
-
+func New(namespaceID, secret string) *Client {
 	return &Client{
 		client:      &http.Client{},
 		namespaceID: namespaceID,
