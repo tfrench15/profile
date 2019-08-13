@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+// Property contains the key-value pair comprising a Segment property.
+type Property struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 // GetProperties queries the Profile API for the given ID's properties.
 func (c *Client) GetProperties(id, value string) error {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/properties"

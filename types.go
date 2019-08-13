@@ -1,10 +1,5 @@
 package profile
 
-// Traits holds the traits for the requested Profile.
-type Traits struct {
-	Traits map[string]interface{} `json:"traits"`
-}
-
 // Cursor holds pagination information concerning the requested data.
 type Cursor struct {
 	URL     string `json:"url"`
