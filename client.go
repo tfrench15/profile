@@ -11,6 +11,7 @@ const (
 type Client struct {
 	client *http.Client
 
+	// identifiers
 	namespaceID string
 	secret      string // TODO: make this Environment variable
 }
