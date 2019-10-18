@@ -14,8 +14,8 @@ type Event map[string]interface{}
 
 // Events contain a slice of Event.
 type Events struct {
-	Data   Event   `json:"data"`
-	Cursor *Cursor `json:"cursor"`
+	Data   interface{} `json:"data"`
+	Cursor *Cursor     `json:"cursor"`
 }
 
 // EventsRequestConfig allows the client to pass in additional query parameters to customize
