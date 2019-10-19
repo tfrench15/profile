@@ -139,3 +139,5 @@ func newEvents() *Events {
 		Cursor: c,
 	}
 }
+
+func (req *EventRequest) internal() {}

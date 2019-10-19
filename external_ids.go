@@ -127,3 +127,5 @@ func newExternalIDs() *ExternalIDs {
 		Cursor: c,
 	}
 }
+
+func (req *ExternalIDsRequest) internal() {}

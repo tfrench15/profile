@@ -118,3 +118,5 @@ func newTraits() *Traits {
 		Cursor: c,
 	}
 }
+
+func (req *TraitsRequest) internal() {}

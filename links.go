@@ -2,6 +2,7 @@ package profile
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -14,8 +15,14 @@ type Link struct {
 	ExternalIDs  []*ExternalID `json:"external_ids"`
 }
 
+// LinkRequest comprises mandatory and required data for retrieving a user's Links from the Profile API.
+type LinksRequest struct {
+	id    string
+	value string
+}
+
 // GetLinks queries the Profile API for the provided ID's links.
-func (c *Client) GetLinks(id, value string) (*Links, error) {
+func (c *Client) GetLinks(request *LinksRequest) (*Links, error) {
 	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/links"
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -41,3 +48,26 @@ func (c *Client) GetLinks(id, value string) (*Links, error) {
 
 	return links, nil
 }
+
+// NewLinksRequest creates a new LinkRequest.
+func NewLinksRequest(id, value string) *LinksRequest {
+	return &LinksRequest{
+		id:    id,
+		value: value,
+	}
+}
+
+// Validate ensures the request is valid and satisfies the Request interface.
+func (req *LinksRequest) Validate() error {
+	if len(req.id) == 0 {
+		return errors.New("request must specify an ID to query by")
+	}
+
+	if len(req.value) == 0 {
+		return errors.New("request must specify an ID value to query by")
+	}
+
+	return nil
+}
+
+func (req *LinksRequest) internal() {}

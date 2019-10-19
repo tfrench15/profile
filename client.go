@@ -24,3 +24,19 @@ func New(namespaceID, secret string) *Client {
 		secret:      secret,
 	}
 }
+
+// Query executes a request against the Profile API.
+func (c *Client) Query(request Request) {
+	switch request.(type) {
+	case *TraitsRequest:
+		return c.GetTraits(request)
+	case *EventRequest:
+		return c.GetEvents(request)
+	case *ExternalIDsRequest:
+		return c.GetExternalIDs(request)
+	case *MetadataRequest:
+		return c.GetMetadata(request)
+	case *LinksRequest:
+		return c.GetLinks(request)
+	}
+}
