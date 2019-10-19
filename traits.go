@@ -96,6 +96,19 @@ func (req *TraitsRequest) SetInclude(traits ...string) error {
 	return nil
 }
 
+// Validate ensures the request is valid and satisfies the Request interface.
+func (req *TraitsRequest) Validate() error {
+	if len(req.id) == 0 {
+		return errors.New("request must specify an ID to query by")
+	}
+
+	if len(req.value) == 0 {
+		return errors.New("request must specify an ID value to query by")
+	}
+
+	return nil
+}
+
 func newTraits() *Traits {
 	c := &Cursor{}
 	m := make(map[string]interface{})

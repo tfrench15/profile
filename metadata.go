@@ -2,6 +2,7 @@ package profile
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -73,3 +74,18 @@ func NewMetadataRequest(id, value string) *MetadataRequest {
 func (req *MetadataRequest) SetVerbose() {
 	req.queryParams.Set("verbose", "true")
 }
+
+// Validate ensures the MetadataRequest is valid and satisfies the Request interface.
+func (req *MetadataRequest) Validate() error {
+	if len(req.id) == 0 {
+		return errors.New("request must specify an ID to query by")
+	}
+
+	if len(req.value) == 0 {
+		return errors.New("request must specify an ID value to query by")
+	}
+
+	return nil
+}
+
+func (req *MetadataRequest) internal() {}
