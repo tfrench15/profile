@@ -2,15 +2,12 @@ package profile
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 )
-
-// Event represents an event associated with a user's Profile.
-type Event map[string]interface{}
 
 // Events contain a slice of Event.
 type Events struct {
@@ -18,22 +15,22 @@ type Events struct {
 	Cursor *Cursor     `json:"cursor"`
 }
 
-// EventsRequestConfig allows the client to pass in additional query parameters to customize
+// EventRequest allows the client to pass in additional query parameters to customize
 // its requst.
-type EventsRequestConfig struct {
-	Include []string
-	Exclude []string
-	Start   time.Time
-	End     time.Time
-	Sort    string
-	Limit   int
+type EventRequest struct {
+	// mandatory params
+	id    string
+	value string
+
+	// optional params
+	queryParams url.Values
 }
 
 // GetEvents queries the Profile API for the given ID's events.
-func (c *Client) GetEvents(id, value string, config *EventsRequestConfig) (*Events, error) {
-	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/events"
-	if config != nil {
-		url = url + config.Encode()
+func (c *Client) GetEvents(request *EventRequest) (*Events, error) {
+	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/events"
+	if len(request.queryParams) > 0 {
+		url = url + request.queryParams.Encode()
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
@@ -57,44 +54,71 @@ func (c *Client) GetEvents(id, value string, config *EventsRequestConfig) (*Even
 		return nil, err
 	}
 
-	fmt.Println(events)
 	return events, nil
 }
 
-// NewEventsRequestConfig returns a new configuration struct for further customizing Events requests.
-func NewEventsRequestConfig(include, exclude []string, sort string, limit int, start, end time.Time) (*EventsRequestConfig, error) {
-	if sort != "asc" || sort != "desc" {
-		return nil, fmt.Errorf("invalid sort param: %s, must be 'asc' or 'desc'", sort)
+// NewEventRequest returns a default EventRequest.
+func NewEventRequest(id, value string) *EventRequest {
+	return &EventRequest{
+		id:          id,
+		value:       value,
+		queryParams: url.Values{},
 	}
-
-	config := &EventsRequestConfig{
-		Include: include,
-		Exclude: exclude,
-		Sort:    sort,
-		Limit:   limit,
-		Start:   start,
-		End:     end,
-	}
-
-	return config, nil
 }
 
-// Encode returns the URL encoding of the query parameters contained in the EventsRequestConfig.
-func (config *EventsRequestConfig) Encode() string {
-	params := url.Values{}
+// SetInclude allows a client to specify certain events it would like to include in a request to the Profile API.
+func (req *EventRequest) SetInclude(events ...string) error {
+	if len(events) == 0 {
+		return errors.New("0 events passed in, please specify events to include")
+	}
 
-	params.Set("include", strings.Join(config.Include, ","))
-	params.Set("exclude", strings.Join(config.Exclude, ","))
-	params.Set("sort", config.Sort)
-	params.Set("limit", string(config.Limit))
+	var include []string
+	for _, event := range events {
+		include = append(include, event)
+	}
 
-	// TODO: set Start and End params.
+	req.queryParams.Set("inlcude", strings.Join(include, ","))
+	return nil
+}
 
-	return params.Encode()
+// SetExclude allows a client to specify certain events it would like to exclude in a request to the Profile API.
+func (req *EventRequest) SetExclude(events ...string) error {
+	if len(events) == 0 {
+		return errors.New("0 events passed in, please specify events to exclude")
+	}
+
+	var exclude []string
+	for _, event := range events {
+		exclude = append(exclude, event)
+	}
+
+	req.queryParams.Set("exclude", strings.Join(exclude, ","))
+	return nil
+}
+
+// SetSort allows a client to specify whether the data returned from the Profile API should be sorted.
+func (req *EventRequest) SetSort(sort string) error {
+	if sort != "asc" || sort != "desc" {
+		return fmt.Errorf("sort must be 'asc' or 'desc, got %s", sort)
+	}
+
+	req.queryParams.Set("sort", sort)
+
+	return nil
+}
+
+// SetLimit sets the limit for number of Events that will be returned by the request to the Profile API.
+func (req *EventRequest) SetLimit(limit int) error {
+	if limit < 1 || limit > 100 {
+		return fmt.Errorf("limit must be at least 1 and at most 100, got %d", limit)
+	}
+
+	req.queryParams.Set("limit", string(limit))
+	return nil
 }
 
 func newEvents() *Events {
-	m := make(Event)
+	m := make(map[string]interface{})
 	c := new(Cursor)
 
 	return &Events{
