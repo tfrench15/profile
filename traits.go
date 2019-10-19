@@ -29,6 +29,9 @@ type TraitsRequest struct {
 // GetTraits queries the Profile API for the provided ID's traits.
 func (c *Client) GetTraits(request *TraitsRequest) (*Traits, error) {
 	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/traits"
+	if len(request.queryParams) > 0 {
+		url = url + request.queryParams.Encode()
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
