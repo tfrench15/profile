@@ -15,8 +15,7 @@ type Traits struct {
 	Cursor *Cursor                `json:"cursor"`
 }
 
-// TraitsRequest allows the client to pass in additional query parameters and customize
-// its request.
+// TraitsRequest comprises the data necessary for retrieving a profile's traits from the Profile API.
 type TraitsRequest struct {
 	// mandatory fields
 	id    string
