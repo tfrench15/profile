@@ -1,6 +1,10 @@
 package profile
 
-import "net/http"
+import (
+	"encoding/json"
+	"errors"
+	"net/http"
+)
 
 const (
 	baseURL         = "https://profiles.segment.com/v1/spaces/"
@@ -26,17 +30,53 @@ func New(namespaceID, secret string) *Client {
 }
 
 // Query executes a request against the Profile API.
-func (c *Client) Query(request Request) {
+func (c *Client) Query(request Request) ([]byte, error) {
+	if err := request.Validate(); err != nil {
+		return nil, err
+	}
+
 	switch q := request.(type) {
 	case *TraitsRequest:
-		c.getTraits(q)
+		traits, err := c.getTraits(q)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(traits)
+
 	case *EventRequest:
-		c.getEvents(q)
+		events, err := c.getEvents(q)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(events)
+
 	case *ExternalIDsRequest:
-		c.getExternalIDs(q)
+		externalIDs, err := c.getExternalIDs(q)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(externalIDs)
+
 	case *MetadataRequest:
-		c.getMetadata(q)
+		metadata, err := c.getMetadata(q)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(metadata)
+
 	case *LinksRequest:
-		c.getLinks(q)
+		links, err := c.getLinks(q)
+		if err != nil {
+			return nil, err
+		}
+
+		return json.Marshal(links)
+
+	default:
+		return nil, errors.New("could not execute Query")
 	}
 }
