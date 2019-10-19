@@ -26,8 +26,8 @@ type EventRequest struct {
 	queryParams url.Values
 }
 
-// GetEvents queries the Profile API for the given ID's events.
-func (c *Client) GetEvents(request *EventRequest) (*Events, error) {
+// getEvents queries the Profile API for the given ID's events.
+func (c *Client) getEvents(request *EventRequest) (*Events, error) {
 	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/events"
 	if len(request.queryParams) > 0 {
 		url = url + request.queryParams.Encode()

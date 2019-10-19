@@ -25,8 +25,8 @@ type TraitsRequest struct {
 	queryParams url.Values
 }
 
-// GetTraits queries the Profile API for the provided ID's traits.
-func (c *Client) GetTraits(request *TraitsRequest) (*Traits, error) {
+// getTraits queries the Profile API for the provided ID's traits.
+func (c *Client) getTraits(request *TraitsRequest) (*Traits, error) {
 	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/traits"
 	if len(request.queryParams) > 0 {
 		url = url + request.queryParams.Encode()

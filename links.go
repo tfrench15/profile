@@ -15,15 +15,15 @@ type Link struct {
 	ExternalIDs  []*ExternalID `json:"external_ids"`
 }
 
-// LinkRequest comprises mandatory and required data for retrieving a user's Links from the Profile API.
+// LinksRequest comprises mandatory and required data for retrieving a user's Links from the Profile API.
 type LinksRequest struct {
 	id    string
 	value string
 }
 
-// GetLinks queries the Profile API for the provided ID's links.
-func (c *Client) GetLinks(request *LinksRequest) (*Links, error) {
-	url := baseURL + c.namespaceID + usersCollection + id + ":" + value + "/links"
+// getLinks queries the Profile API for the provided ID's links.
+func (c *Client) getLinks(request *LinksRequest) (*Links, error) {
+	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/links"
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

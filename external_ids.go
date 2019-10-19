@@ -36,8 +36,8 @@ type ExternalIDsRequest struct {
 	queryParmas url.Values
 }
 
-// GetExternalIDs queries the Profile API for the given ID's externalID's.
-func (c *Client) GetExternalIDs(request *ExternalIDsRequest) (*ExternalIDs, error) {
+// getExternalIDs queries the Profile API for the given ID's externalID's.
+func (c *Client) getExternalIDs(request *ExternalIDsRequest) (*ExternalIDs, error) {
 	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/external_ids"
 	if len(request.queryParmas) > 0 {
 		url = url + request.queryParmas.Encode()

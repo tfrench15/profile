@@ -29,8 +29,8 @@ type MetadataRequest struct {
 	queryParams url.Values
 }
 
-// GetMetadata queries the Profile API for the given ID's metadata.
-func (c *Client) GetMetadata(request *MetadataRequest) (*Metadata, error) {
+// getMetadata queries the Profile API for the given ID's metadata.
+func (c *Client) getMetadata(request *MetadataRequest) (*Metadata, error) {
 	url := baseURL + c.namespaceID + usersCollection + request.id + ":" + request.value + "/metadata"
 	if len(request.queryParams) > 0 {
 		url = url + request.queryParams.Encode()
