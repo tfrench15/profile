@@ -68,6 +68,11 @@ func (c *Client) getExternalIDs(request *ExternalIDsRequest) (*ExternalIDs, erro
 	return externalIDs, nil
 }
 
+// Marshal marshals the ExternalIDs into JSON and satisfies the Response interface.
+func (e *ExternalIDs) Marshal() ([]byte, error) {
+	return json.Marshal(e)
+}
+
 // NewExternalIDsRequest constructs a new ExternalIDsRequest with the given ID and value.
 func NewExternalIDsRequest(id, value string) *ExternalIDsRequest {
 	return &ExternalIDsRequest{
@@ -129,3 +134,4 @@ func newExternalIDs() *ExternalIDs {
 }
 
 func (req *ExternalIDsRequest) internal() {}
+func (e *ExternalIDs) internal()          {}

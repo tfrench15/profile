@@ -61,6 +61,11 @@ func (c *Client) getMetadata(request *MetadataRequest) (*Metadata, error) {
 	return &metadata, nil
 }
 
+// Marshal marshals the Metadata into JSON and satisfies the Response interface.
+func (m *Metadata) Marshal() ([]byte, error) {
+	return json.Marshal(m)
+}
+
 // NewMetadataRequest constructs a new MetadataRequest with the given ID and value.
 func NewMetadataRequest(id, value string) *MetadataRequest {
 	return &MetadataRequest{
@@ -89,3 +94,4 @@ func (req *MetadataRequest) Validate() error {
 }
 
 func (req *MetadataRequest) internal() {}
+func (m *Metadata) internal()          {}

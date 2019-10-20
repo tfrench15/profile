@@ -57,6 +57,11 @@ func (c *Client) getTraits(request *TraitsRequest) (*Traits, error) {
 	return traits, nil
 }
 
+// Marshal marshals Traits into JSON and satisfies the Response interface.
+func (t *Traits) Marshal() ([]byte, error) {
+	return json.Marshal(t)
+}
+
 // NewTraitsRequest returns a new configuration struct for further customizing Traits requests.
 func NewTraitsRequest(id, value string) *TraitsRequest {
 	return &TraitsRequest{
@@ -120,3 +125,4 @@ func newTraits() *Traits {
 }
 
 func (req *TraitsRequest) internal() {}
+func (t *Traits) internal()          {}

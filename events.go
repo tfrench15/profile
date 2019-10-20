@@ -57,6 +57,11 @@ func (c *Client) getEvents(request *EventRequest) (*Events, error) {
 	return events, nil
 }
 
+// Marshal marshals the Events into JSON and satisfies the Response interface.
+func (e *Events) Marshal() ([]byte, error) {
+	return json.Marshal(e)
+}
+
 // NewEventRequest returns a default EventRequest.
 func NewEventRequest(id, value string) *EventRequest {
 	return &EventRequest{
@@ -141,3 +146,4 @@ func newEvents() *Events {
 }
 
 func (req *EventRequest) internal() {}
+func (e *Events) internal()         {}

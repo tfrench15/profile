@@ -49,6 +49,11 @@ func (c *Client) getLinks(request *LinksRequest) (*Links, error) {
 	return links, nil
 }
 
+// Marshal marshals the Links into JSON and satisfies the Response interface.
+func (l *Links) Marshal() ([]byte, error) {
+	return json.Marshal(l)
+}
+
 // NewLinksRequest creates a new LinkRequest.
 func NewLinksRequest(id, value string) *LinksRequest {
 	return &LinksRequest{
@@ -71,3 +76,4 @@ func (req *LinksRequest) Validate() error {
 }
 
 func (req *LinksRequest) internal() {}
+func (l *Links) internal()          {}

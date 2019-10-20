@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 )
@@ -30,51 +29,26 @@ func New(namespaceID, secret string) *Client {
 }
 
 // Query executes a request against the Profile API.
-func (c *Client) Query(request Request) ([]byte, error) {
+func (c *Client) Query(request Request) (Response, error) {
 	if err := request.Validate(); err != nil {
 		return nil, err
 	}
 
 	switch q := request.(type) {
 	case *TraitsRequest:
-		traits, err := c.getTraits(q)
-		if err != nil {
-			return nil, err
-		}
-
-		return json.Marshal(traits)
+		return c.getTraits(q)
 
 	case *EventRequest:
-		events, err := c.getEvents(q)
-		if err != nil {
-			return nil, err
-		}
-
-		return json.Marshal(events)
+		return c.getEvents(q)
 
 	case *ExternalIDsRequest:
-		externalIDs, err := c.getExternalIDs(q)
-		if err != nil {
-			return nil, err
-		}
-
-		return json.Marshal(externalIDs)
+		return c.getExternalIDs(q)
 
 	case *MetadataRequest:
-		metadata, err := c.getMetadata(q)
-		if err != nil {
-			return nil, err
-		}
-
-		return json.Marshal(metadata)
+		return c.getMetadata(q)
 
 	case *LinksRequest:
-		links, err := c.getLinks(q)
-		if err != nil {
-			return nil, err
-		}
-
-		return json.Marshal(links)
+		return c.getLinks(q)
 
 	default:
 		return nil, errors.New("could not execute Query")
